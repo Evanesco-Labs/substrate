@@ -333,6 +333,16 @@ mod waiting {
 			}
 		}
 	}
+
+	pub struct WhiteNoiseServer(pub Option<whitenoise_rpc::server::Server>);
+
+	impl Drop for WhiteNoiseServer {
+		fn drop(&mut self) {
+			if let Some(server) = self.0.take() {
+				server.stop();
+			}
+		}
+	}
 }
 
 /// Starts RPC servers that run in their own thread, and returns an opaque object that keeps them alive.
@@ -370,12 +380,26 @@ fn start_rpc_servers<
 		}
 	}
 
+	fn deny_unsafe_whtienoise() -> sc_rpc::DenyUnsafe {
+		sc_rpc::DenyUnsafe::No
+	}
+
+	fn whitenoise_middleware() -> jsonrpc_core::NoopMiddleware {
+		jsonrpc_core::NoopMiddleware::default()
+	}
+
 	Ok(Box::new((
 		config.rpc_ipc.as_ref().map(|path| sc_rpc_server::start_ipc(
 			&*path, gen_handler(
 				sc_rpc::DenyUnsafe::No,
 				sc_rpc_server::RpcMiddleware::new(rpc_metrics.clone(), "ipc")
 			)
+		)),
+		config.rpc_whitenosie.as_ref().map(|bootstrap| sc_rpc_server::start_whitenoise(
+			&*bootstrap, gen_handler(
+				deny_unsafe_whtienoise(),
+				sc_rpc_server::RpcMiddleware::new(rpc_metrics.clone(), "whitenoise"),
+			),
 		)),
 		maybe_start_server(
 			config.rpc_http,

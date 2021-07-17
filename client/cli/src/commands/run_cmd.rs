@@ -119,6 +119,10 @@ pub struct RunCmd {
 	#[structopt(long = "rpc-port", value_name = "PORT")]
 	pub rpc_port: Option<u16>,
 
+	/// Specify WhiteNoise RPC bootstrap multiaddress
+	#[structopt(long = "whitenoise-bootstrap")]
+	pub whitenoise_bootstrap: Option<String>,
+
 	/// Specify WebSockets RPC server TCP port.
 	#[structopt(long = "ws-port", value_name = "PORT")]
 	pub ws_port: Option<u16>,
@@ -424,6 +428,10 @@ impl CliConfiguration for RunCmd {
 
 	fn rpc_ipc(&self) -> Result<Option<String>> {
 		Ok(self.ipc_path.clone())
+	}
+
+	fn rpc_whitenoise(&self) -> Result<Option<String>> {
+		Ok(self.whitenoise_bootstrap.clone())
 	}
 
 	fn rpc_ws(&self, default_listen_port: u16) -> Result<Option<SocketAddr>> {

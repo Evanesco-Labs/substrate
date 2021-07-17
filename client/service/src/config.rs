@@ -87,6 +87,8 @@ pub struct Configuration {
 	pub rpc_ws: Option<SocketAddr>,
 	/// RPC over IPC binding path. `None` if disabled.
 	pub rpc_ipc: Option<String>,
+	///RPC over WhiteNoise Network Bootstrap MultiAddress. `None` if disabled.
+	pub rpc_whitenosie: Option<String>,
 	/// Maximum number of connections for WebSockets RPC server. `None` if default.
 	pub rpc_ws_max_connections: Option<usize>,
 	/// Size of the RPC HTTP server thread pool. `None` if default.

@@ -99,6 +99,7 @@ where
 		rpc_cors: Default::default(),
 		rpc_http: Default::default(),
 		rpc_ipc: Default::default(),
+		rpc_whitenosie: Default::default(),
 		rpc_ws: Default::default(),
 		rpc_ws_max_connections: Default::default(),
 		rpc_http_threads: Default::default(),

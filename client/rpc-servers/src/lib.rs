@@ -122,6 +122,20 @@ mod inner {
 		builder.start(addr)
 	}
 
+	/// Start WhiteNoise server connecting to specified WhiteNoise network.
+	///
+	/// **Note**: Only available if `not(target_os = "unknown")`.
+	pub fn start_whitenoise<M: pubsub::PubSubMetadata + Default>(
+		bootstrap:&str,
+		io: RpcHandler<M>,
+	) -> io::Result<whitenoise_rpc::server::Server> {
+		let mut builder = whitenoise_rpc::server::ServerBuilder::new(
+			bootstrap,
+			None,
+			io);
+		async_std::task::block_on(builder.start())
+	}
+
 	/// Start WS server listening on given address.
 	///
 	/// **Note**: Only available if `not(target_os = "unknown")`.

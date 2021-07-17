@@ -336,6 +336,13 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 		Ok(None)
 	}
 
+	/// Get the WhiteNoise network Bootstrap MultiAddress (`None` if disabled).
+	///
+	/// By default this is `None`.
+	fn rpc_whitenoise(&self) -> Result<Option<String>> {
+		Ok(None)
+	}
+
 	/// Get the RPC websocket address (`None` if disabled).
 	///
 	/// By default this is `None`.
@@ -536,6 +543,7 @@ pub trait CliConfiguration<DCV: DefaultConfigurationValues = ()>: Sized {
 			rpc_http: self.rpc_http(DCV::rpc_http_listen_port())?,
 			rpc_ws: self.rpc_ws(DCV::rpc_ws_listen_port())?,
 			rpc_ipc: self.rpc_ipc()?,
+			rpc_whitenosie: self.rpc_whitenoise()?,
 			rpc_methods: self.rpc_methods()?,
 			rpc_ws_max_connections: self.rpc_ws_max_connections()?,
 			rpc_http_threads: self.rpc_http_threads()?,

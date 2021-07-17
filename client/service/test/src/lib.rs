@@ -260,6 +260,7 @@ fn node_config<G: RuntimeGenesis + 'static, E: ChainSpecExtension + Clone + 'sta
 		execution_strategies: Default::default(),
 		rpc_http: None,
 		rpc_ipc: None,
+		rpc_whitenosie: None,
 		rpc_ws: None,
 		rpc_ws_max_connections: None,
 		rpc_http_threads: None,

@@ -21,6 +21,9 @@ prometheus-endpoint = { package = "substrate-prometheus-endpoint", path = "../..
 serde = "1.0.101"
 serde_json = "1.0.41"
 sp-runtime = { version = "3.0.0", path = "../../primitives/runtime" }
+whitenoise-rpc = {git = "https://github.com/Evanesco-Labs/WhiteNoise-RPC.git"}
+libp2p = { version = "0.37.1" }
+async-std = { version = "1.9.0", features = ["attributes"] }
 
 [target.'cfg(not(target_os = "unknown"))'.dependencies]
 http = { package = "jsonrpc-http-server", version = "15.1.0" }

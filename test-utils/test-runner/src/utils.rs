@@ -123,6 +123,7 @@ pub fn default_config(task_executor: TaskExecutor, mut chain_spec: Box<dyn Chain
 		rpc_http: None,
 		rpc_ws: None,
 		rpc_ipc: None,
+		rpc_whitenosie: None,
 		rpc_ws_max_connections: None,
 		rpc_http_threads: None,
 		rpc_cors: None,
