@@ -400,6 +400,7 @@ fn start_rpc_servers<
 				deny_unsafe_whtienoise(),
 				sc_rpc_server::RpcMiddleware::new(rpc_metrics.clone(), "whitenoise"),
 			),
+			config.network.node_key.clone().into_keypair().unwrap(),
 		)),
 		maybe_start_server(
 			config.rpc_http,
