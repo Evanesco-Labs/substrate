@@ -1,31 +1,144 @@
-# Substrate &middot; [![GitHub license](https://img.shields.io/badge/license-GPL3%2FApache2-blue)](#LICENSE) [![GitLab Status](https://gitlab.parity.io/parity/substrate/badges/master/pipeline.svg)](https://gitlab.parity.io/parity/substrate/pipelines) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](docs/CONTRIBUTING.adoc)
+# Substrate WhiteNoise-based RPC
 
-<p align="center">
-  <img src="/docs/media/sub.gif">
-</p>
+This implementation adds a WhiteNoise-based rpc component to Substrate, so that clients and Substrate nodes can
+make rpc requests and responses through the WhiteNoise network. The rpc messages will pass through the WhiteNoise
+routing node and reach the dest address through multi-hop connection. This can protect the network privacy of both the
+rpc client and the node. Here is more details
+about [WhiteNoise protocol](https://github.com/Evanesco-Labs/WhiteNoise.rs).
 
+## Getting Started
 
-Substrate is a next-generation framework for blockchain innovation 🚀.
+Follow the steps below to get started substrate with the WhiteNoise-based RPC.
 
-## Trying it out
+### Rust Setup
 
-Simply go to [substrate.dev](https://substrate.dev) and follow the 
-[installation](https://substrate.dev/docs/en/knowledgebase/getting-started/) instructions. You can 
-also try out one of the [tutorials](https://substrate.dev/en/tutorials).
+First, complete the [basic Rust setup instructions](./bin/node-template/docs/rust-setup.md).
 
-## Contributions & Code of Conduct
+### Build
 
-Please follow the contributions guidelines as outlined in [`docs/CONTRIBUTING.adoc`](docs/CONTRIBUTING.adoc). In all communications and contributions, this project follows the [Contributor Covenant Code of Conduct](docs/CODE_OF_CONDUCT.md).
+The `cargo build` command will perform an initial build. Use the following command to build the node without launching
+it:
 
-## Security
+```sh
+cargo build --release
+```
 
-The security policy and procedures can be found in [`docs/SECURITY.md`](docs/SECURITY.md).
+### WhiteNoise RPC Component
 
-## License
+We have added a new parameter for substrate node  `--whitenoise-bootstrap`. It specifies the bootstrap node address of
+the WhiteNoise Network that you want to connect to. WhiteNoise Network is a decentralized network like TOR network, and user
+needs to access the network through the bootstrap node. After the Substrate node is started, it will register to the
+WhiteNoise network and get a WhiteNoiseID. Then a rpc client is able to generate a privacy connection by dialing the
+WhiteNoiseID, and sends an rpc request on this connection. After Substrate nodes receive the request, they also response
+on the same connection.
 
-- Substrate Primitives (`sp-*`), Frame (`frame-*`) and the pallets (`pallets-*`), binaries (`/bin`) and all other utilities are licensed under [Apache 2.0](LICENSE-APACHE2).
-- Substrate Client (`/client/*` / `sc-*`) is licensed under [GPL v3.0 with a classpath linking exception](LICENSE-GPL3).
+If parameter `--whitenoise-bootstrap` is filled, substrate node will start with WhiteNoise-based rpc, otherwise it will not.
 
-The reason for the split-licensing is to ensure that for the vast majority of teams using Substrate to create feature-chains, then all changes can be made entirely in Apache2-licensed code, allowing teams full freedom over what and how they release and giving licensing clarity to commercial teams.
+You can also see information about this param with this command:
 
-In the interests of the community, we require any deeper improvements made to Substrate's core logic (e.g. Substrate's internal consensus, crypto or database code) to be contributed back so everyone can benefit.
+```sh
+./target/release/node-template -h | grep whitenoise
+```
+
+## Example
+
+### Start a Local WhiteNoise Network
+
+Follow the [instructions](https://github.com/Evanesco-Labs/WhiteNoise.rs#start-local-whitenoise-network) to start a local
+WhiteNoise Network.
+
+For better description, we assume that the bootstrap node address we start is the following:
+
+`/ip4/127.0.0.1/tcp/6661/p2p/12D3KooWMNFaCGrnfMomi4TTMvQsKMGVwoxQzHo6P49ue6Fwq6zU`
+
+### Start substrate node-template
+
+Generate a new directory and copy node-template into this directory with this command:
+
+```shell
+mkdir rpctest
+cp ./target/release/node-template ./rpctest/
+```
+
+Start a node-template with WhiteNoise based rpc.
+
+```shell
+./rpctest/node-template \
+--base-path /tmp/alice \
+  --chain local \
+  --alice \
+  --port 30333 \
+  --ws-port 9945 \
+  --rpc-port 9933 \
+  --node-key 0000000000000000000000000000000000000000000000000000000000000001 \
+  --validator \
+--whitenoise-bootstrap /ip4/127.0.0.1/tcp/6661/p2p/12D3KooWMNFaCGrnfMomi4TTMvQsKMGVwoxQzHo6P49ue6Fwq6zU
+```
+
+The identity of this WhiteNoise rpc server called WhiteNoiseID, it is shown in log. Remember this WhiteNoiseID printed in your log,
+rpc client have to dial this id to request. The WhiteNoiseID
+is `07sYJEC6MiSP6PZBuhq6KJUwgHhJNvwVWipySMR8peVJs` in the following log:
+
+```shell
+2021-06-28T05:39:36.426Z INFO  whitenoisers::network::node] [WhiteNoise] local whitenoise id:07sYJEC6MiSP6PZBuhq6KJUwgHhJNvwVWipySMR8peVJs
+```
+
+### Client Request
+
+We also implement a WhiteNoise rpc client to send raw json rpc requests and print out response. Clone and
+build [WhiteNoise-RPC](https://github.com/Evanesco-Labs/WhiteNoise-RPC#rpc-client).
+
+Then generate a new file `./insert_request.json` and copy a json request to this file. In this test, we first call
+insertKey method. Copy the following json request to `./insert_request.json`:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "author_insertKey",
+  "params": [
+    "aura",
+    "clip organ olive upper oak void inject side suit toilet stick narrow",
+    "0x9effc1668ca381c242885516ec9fa2b19c67b6684c02a8a3237b6862e5c8cd7e"
+  ]
+}
+```
+
+Send the first request with this command:
+
+```shell
+./target/release/whitenoise-rpc --bootstrap /ip4/127.0.0.1/tcp/6661/p2p/12D3KooWMNFaCGrnfMomi4TTMvQsKMGVwoxQzHo6P49ue6Fwq6zU --id 06ASf5EcmmEHTgDJ4X4ZT5vT6iHVJBXPg5AN5YoTCpGWt --json ./insert_request.json
+```
+
+You can see the response:
+
+```
+response: {"jsonrpc":"2.0","result":null,"id":1}
+```
+
+We can send another request to check if it has the Key we insert. Generate a new file `./has_request.json` and copy the
+following json request to `./has_request.json`:
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "author_hasKey",
+  "params": [
+    "0x9effc1668ca381c242885516ec9fa2b19c67b6684c02a8a3237b6862e5c8cd7e",
+    "aura"
+  ]
+}
+```
+
+Send the second request with this command:
+
+```shell
+./target/release/whitenoise-rpc --bootstrap /ip4/127.0.0.1/tcp/6661/p2p/12D3KooWMNFaCGrnfMomi4TTMvQsKMGVwoxQzHo6P49ue6Fwq6zU --id 06ASf5EcmmEHTgDJ4X4ZT5vT6iHVJBXPg5AN5YoTCpGWt --json ./has_request.json
+```
+
+You can see the second response, the Key is successfully inserted:
+
+```
+response: {"jsonrpc":"2.0","result":null,"id":1}
+```
