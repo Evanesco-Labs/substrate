@@ -81,7 +81,7 @@ tracing = "0.1.25"
 tracing-futures = { version = "0.2.4" }
 parity-util-mem = { version = "0.9.0", default-features = false, features = ["primitive-types"] }
 async-trait = "0.1.42"
-whitenoise-rpc = {git = "https://github.com/Evanesco-Labs/WhiteNoise-RPC.git"}
+whitenoise-rpc = {git = "https://github.com/Evanesco-Labs/WhiteNoise-RPC.git",rev = "32947d1"}
 libp2p = { version = "0.37.1" }
 async-std = { version = "1.9.0", features = ["attributes"] }
 
