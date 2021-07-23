@@ -11807,7 +11807,7 @@ dependencies = [
 [[package]]
 name = "whitenoise-rpc"
 version = "0.1.0"
-source = "git+https://github.com/Evanesco-Labs/WhiteNoise-RPC.git#36bf91cde672b9c64b2bc179910edc9e90c71d79"
+source = "git+https://github.com/Evanesco-Labs/WhiteNoise-RPC.git?rev=32947d1#32947d10067ae149e5706765ae4b468bf81c14a9"
 dependencies = [
  "async-std",
  "clap",

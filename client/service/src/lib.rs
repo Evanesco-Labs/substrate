@@ -384,6 +384,7 @@ fn start_rpc_servers<
 		sc_rpc::DenyUnsafe::No
 	}
 
+	#[allow(dead_code)]
 	fn whitenoise_middleware() -> jsonrpc_core::NoopMiddleware {
 		jsonrpc_core::NoopMiddleware::default()
 	}
