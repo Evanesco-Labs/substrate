@@ -32,6 +32,10 @@ WhiteNoise network and get a WhiteNoiseID. Then a rpc client is able to generate
 WhiteNoiseID, and sends an rpc request on this connection. After Substrate nodes receive the request, they also response
 on the same connection.
 
+Notice that the WhiteNoiseID of a substrate node is derived from the node key.
+The WhiteNoiseID should be unique in the WhiteNoise network, otherwise sending and receiving messages may be affected for different clients with the same WhiteNoiseID.
+So do not use the same node key to start up multiple substrate nodes with WhiteNoise RPC.
+
 If parameter `--whitenoise-bootstrap` is filled, substrate node will start with WhiteNoise-based rpc, otherwise it will not.
 
 You can also see information about this param with this command:
@@ -70,7 +74,6 @@ Start a node-template with WhiteNoise based rpc.
   --port 30333 \
   --ws-port 9945 \
   --rpc-port 9933 \
-  --node-key 0000000000000000000000000000000000000000000000000000000000000001 \
   --validator \
 --whitenoise-bootstrap /ip4/127.0.0.1/tcp/6661/p2p/12D3KooWMNFaCGrnfMomi4TTMvQsKMGVwoxQzHo6P49ue6Fwq6zU
 ```
@@ -140,5 +143,5 @@ Send the second request with this command:
 You can see the second response, the Key is successfully inserted:
 
 ```
-response: {"jsonrpc":"2.0","result":null,"id":1}
+response: {"jsonrpc":"2.0","result":true,"id":1}
 ```
