@@ -11807,7 +11807,7 @@ dependencies = [
 [[package]]
 name = "whitenoise-rpc"
 version = "0.1.0"
-source = "git+https://github.com/Evanesco-Labs/WhiteNoise-RPC.git?rev=2255e79#2255e798ea4dffd49495e46fb70fe8a5a9f291e9"
+source = "git+https://github.com/Evanesco-Labs/WhiteNoise-RPC.git?rev=b75e6ce#b75e6ce3e6b671ac35b155fffc237246b414a921"
 dependencies = [
  "async-std",
  "clap",
@@ -11827,7 +11827,7 @@ dependencies = [
 [[package]]
 name = "whitenoisers"
 version = "0.1.0"
-source = "git+https://github.com/Evanesco-Labs/WhiteNoise.rs.git?rev=b5f4b55#b5f4b5594978f0aed24b3e2a4969faf8bc2f331d"
+source = "git+https://github.com/Evanesco-Labs/WhiteNoise.rs.git?rev=0e6d0ce#0e6d0ce112e3d37e63995af5a0eac06747407d24"
 dependencies = [
  "async-std",
  "async-trait",

@@ -1,10 +1,13 @@
 # Substrate WhiteNoise-based RPC
 
-This implementation adds a WhiteNoise-based rpc component to Substrate, so that clients and Substrate nodes can
-make rpc requests and responses through the WhiteNoise network. The rpc messages will pass through the WhiteNoise
-routing node and reach the dest address through multi-hop connection. This can protect the network privacy of both the
-rpc client and the node. Here is more details
+This implementation adds a WhiteNoise-based rpc component to Substrate, so that clients and Substrate nodes can make rpc
+requests and responses through the WhiteNoise network.
+
+The rpc messages will pass through the WhiteNoise routing node and reach the dest address through multi-hop connection.
+This can protect the network privacy of both the rpc client and the node. Here is more details
 about [WhiteNoise protocol](https://github.com/Evanesco-Labs/WhiteNoise.rs).
+
+**Quick Start** follow this [tutorial](./tutorial.md).
 
 ## Getting Started
 
@@ -26,17 +29,18 @@ cargo build --release
 ### WhiteNoise RPC Component
 
 We have added a new parameter for substrate node  `--whitenoise-bootstrap`. It specifies the bootstrap node address of
-the WhiteNoise Network that you want to connect to. WhiteNoise Network is a decentralized network like TOR network, and user
-needs to access the network through the bootstrap node. After the Substrate node is started, it will register to the
-WhiteNoise network and get a WhiteNoiseID. Then a rpc client is able to generate a privacy connection by dialing the
+the WhiteNoise Network that you want to connect to. WhiteNoise Network is a decentralized network like TOR network, and
+user needs to access the network through the bootstrap node. After the Substrate node is started, it will register to
+the WhiteNoise network and get a WhiteNoiseID. Then a rpc client is able to generate a privacy connection by dialing the
 WhiteNoiseID, and sends an rpc request on this connection. After Substrate nodes receive the request, they also response
 on the same connection.
 
-Notice that the WhiteNoiseID of a substrate node is derived from the node key.
-The WhiteNoiseID should be unique in the WhiteNoise network, otherwise sending and receiving messages may be affected for different clients with the same WhiteNoiseID.
-So do not use the same node key to start up multiple substrate nodes with WhiteNoise RPC.
+Notice that the WhiteNoiseID of a substrate node is derived from the node key. The WhiteNoiseID should be unique in the
+WhiteNoise network, otherwise sending and receiving messages may be affected for different clients with the same
+WhiteNoiseID. So do not use the same node key to start up multiple substrate nodes with WhiteNoise RPC.
 
-If parameter `--whitenoise-bootstrap` is filled, substrate node will start with WhiteNoise-based rpc, otherwise it will not.
+If parameter `--whitenoise-bootstrap` is filled, substrate node will start with WhiteNoise-based rpc, otherwise it will
+not.
 
 You can also see information about this param with this command:
 
@@ -48,8 +52,8 @@ You can also see information about this param with this command:
 
 ### Start a Local WhiteNoise Network
 
-Follow the [instructions](https://github.com/Evanesco-Labs/WhiteNoise.rs#start-local-whitenoise-network) to start a local
-WhiteNoise Network.
+Follow the [instructions](https://github.com/Evanesco-Labs/WhiteNoise.rs#start-local-whitenoise-network) to start a
+local WhiteNoise Network.
 
 For better description, we assume that the bootstrap node address we start is the following:
 
@@ -78,8 +82,8 @@ Start a node-template with WhiteNoise based rpc.
 --whitenoise-bootstrap /ip4/127.0.0.1/tcp/6661/p2p/12D3KooWMNFaCGrnfMomi4TTMvQsKMGVwoxQzHo6P49ue6Fwq6zU
 ```
 
-The identity of this WhiteNoise rpc server called WhiteNoiseID, it is shown in log. Remember this WhiteNoiseID printed in your log,
-rpc client have to dial this id to request. The WhiteNoiseID
+The identity of this WhiteNoise rpc server called WhiteNoiseID, it is shown in log. Remember this WhiteNoiseID printed
+in your log, rpc client have to dial this id to request. The WhiteNoiseID
 is `07sYJEC6MiSP6PZBuhq6KJUwgHhJNvwVWipySMR8peVJs` in the following log:
 
 ```shell
